@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+
+\title{FiveThirtyEight Riddler 05-15-2020}
+\author{Kevin Bi}
+\date{May 2020}
+
+\usepackage{./Ksty/ksty}
+\begin{document}
+
+\maketitle
+The below is a response to the FiveThirtyEight Riddler Classic for the \href{https://fivethirtyeight.com/features/can-you-find-the-best-dungeons-dragons-strategy/}{week of 05-15-2020}:
+
+Let $R_i$ denote the $i$th dice roll. 
+
+First, we consider the advantage of disadvantage roll. Let $M_{ij} = \min(R_i, R_j)$. Then let $X = \max(M_{12}, M_{34})$. $X$ is the result of an advantage of disadvantage roll. First, we find the distribution of $M_{12}$. Observe that the probability of $M_{12}$ being greater than some $k$ is the same as the probabilty that both $R_1$ and $R_2$ are greater than $k$. So,
+\begin{align*}
+    P(M_{12} > k) &= P(R_1 > k, R_2 > k) \\
+    &= \sum_{i = k + 1}^{20} \sum_{j = k + 1}^{20} P(R_1 = i, R_2 = j) \\
+    &= \sum_{i = k + 1}^{20} \sum_{j = k + 1}^{20} P(R_1 = i)P(R_2 = j) \text{ dice rolls are independent} \\
+    &= \sum_{i = k + 1}^{20} \sum_{j = k + 1}^{20} \left(\frac{1}{20}\right)^2 \\
+    &= 1 - \frac{1}{10} k + \frac{k^2}{400}
+\end{align*}
+Taking the complement yields
+\begin{align*}
+    P(M_{12} \leq k) = 1 - P(M_{12} > k) =  \frac{1}{10}k - \frac{k^2}{400}
+\end{align*}
+Then we can compute $P(X \leq k)$, which is the same as both $M_{12}$ and $M_{34}$ being less than $k$. This yields,
+\begin{align*}
+    P(X \leq k) &= P(M_{12} \leq k, M_{34} \leq k) \\
+    &= P(M_{12} \leq k) P(M_{34} \leq k) \\
+    &= \left(\frac{1}{10} k - \frac{1}{400} k^2\right)^2 \\
+    &= \frac{1}{100} k^2 - \frac{1}{2000} k^3 + \frac{1}{160000} k^4
+\end{align*}   
+We can then compute $E[X]$ with the tail sum expectation formula, so,
+\begin{align*}
+    E[X] &= \sum_{k = 0}^{20} P(X > k) \\
+    &= \sum_{k = 0}^{20} 1 - P(X \leq k) \\
+    &= \sum_{k = 0}^{20} 1 - \frac{1}{100} k^2 + \frac{1}{2000} k^3 - \frac{1}{160000} k^4 \\
+    &= \frac{786667}{80000} \\
+    &\approx 9.8333
+\end{align*}
+
+Next, we consider the disadvantage of advantage roll. Let $\tilde{M}_{ij} = \max(R_i, R_j)$. Then let $Y = \min(\tilde{M}_{12}, \tilde{M}_{34})$. $Y$ is the result of an advantage of disadvantage roll. Once again, we find the distribution of $\tilde{M}_{12}$. The probability that $\tilde{M}_{12} \leq k$ is the same as the probabilty that $R_1$ and $R_2$ are greater than $k$. So,
+\begin{align*}
+    P(\tilde{M}_{12} \leq k) &= P(R_1 \leq k, R_2 \leq k) \\
+    &= \sum_{i = 1}^k \sum_{j = 1}^k P(R_1 = i) P(R_2 = j) \\
+    &= \sum_{i = 1}^k \sum_{j = 1}^k \left(\frac{1}{20}\right)^2 \\
+    &= \frac{k^2}{400}
+\end{align*}
+Then the probability that $Y > k$ is the same as the probability that both $\tilde{M}_{12}$ and $\tilde{M}_{34}$ are greater than $k$. So,
+\begin{align*}
+    P(Y > k) &= P(\tilde{M}_{12} > k, \tilde{M}_{34} > k) \\
+    &= P(\tilde{M}_{12} > k)P(\tilde{M}_{34} > k) \\
+    &= \left(1 - \frac{k^2}{400}\right)^2 \\
+    &= 1 - \frac{1}{400} k^2 + \frac{1}{160000} k^4
+\end{align*}
+Once again using the tail sum formula for expectations yields,
+\begin{align*}
+    E[Y] &= \sum_{k = 0}^{20} P(Y > k) \\
+    &= \sum_{k = 0}^{20} 1 - \frac{1}{400} k^2 + \frac{1}{160000} k^4 \\
+    &= \frac{893333}{80000} \\
+    &\approx 11.1666
+\end{align*}
+
+Finally, the expectation of a single roll, $R$, is given by $E[R] = \frac{1 + 20}{2} = 10.5$. So, the expectations are $E[Y] > E[R] > E[X]$. 
+
+\textbf{Bonus question}: We are comparing $P(X \geq k), P(Y \geq k)$, and $P(R \geq k)$. Observe that $P(X \geq k) = P(X > k - 1)$. Observe that for $k = 1$, these are all probability $1$. Using the previous computations for these, we can compare and obtain the following,
+\begin{align*}
+    P(Y \geq k) &> P(X \geq k) \, \forall \, k = 2, \dots, 20 \\
+    P(Y \geq k) &> P(R \geq k) \, k = 2, \dots, 13 \text{ (less for $k > 13$)} \\
+    P(X \geq k) &> P(R \geq k) \, k = 2, \dots, 8 \text{ (less for $k > 9$)}
+\end{align*}
+
+\end{document}
