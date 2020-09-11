@@ -1,0 +1,39 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{ksty}
+
+\newcommand{\Unif}{\text{Unif}}
+\newcommand{\Bin}{\text{Binomial}}
+\title{FiveThirtyEight Riddler 09-11-2020}
+\author{Kevin Bi}
+\date{September 11, 2020}
+
+\begin{document}
+
+\maketitle
+The below is a response to the FiveThirtyEight Riddler for the \href{https://fivethirtyeight.com/features/can-you-reach-the-summit-first/}{week of 09-11-2020}:
+
+\section*{Riddler Classic}
+We can find the expectation by first finding the probability that we earn each score. To do so is a simple counting problem. In total, there are $4! = 24$ equally likely possible finishing positions. We can group them by how many points we receive. 
+
+\subsection*{5 points}
+The only way we get 5 points is if we are faster than all of the others. So we are in first place, and the other three are in some arrangement of 2nd through 4th place. There are $3! = 6$ possible such arrangements.
+
+\subsection*{3 points}
+For this to happen, we have to get 2nd place. However, we know that if either of the teammates gets 1st place, then they will both place ahead of us. This means that the only way for this to happen is for us to get second to the other unteamed rider, and for the two teammates to get 3rd and 4th. Our position and the 1st place finisher are fixed, so we permute the two teammate positions to get $2! = 2$ outcomes.
+
+\subsection*{1 point}
+We omit the 2 point case for now because this case is simpler and the remaining cases must yield 2 points. There are two types of ways that we could get last place: either we actually finish last, or one of the teammates finishes behind us. There are $3! = 6$ ways that we finish last. Fixing one of the teammates behind us, there are $2! = 2$ ways for the unteamed player and the other teammate to be arranged in first and second place. There are two teammates that oculd be fixed, so in total, there are $3! + 2 (2!) = 10$ ways.
+
+\subsection*{2 points}
+The remaining outcomes must be two point outcome. So we have $24 - 6 - 2 - 10 = 6$ outcomes where we get second place.
+
+\subsection*{Results}
+So, to calculate our expected value, we can just add all these outcomes up and divide by 24 to get an average,
+\begin{align*}
+    \frac{6(5) + 2(3) + 6(2) + 10(1)}{24} = \frac{29}{12}
+\end{align*}
+See race.py to see a computational approach.
+
+\end{document}
